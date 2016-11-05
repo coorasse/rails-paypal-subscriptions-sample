@@ -6,9 +6,7 @@ gem 'rails', '~> 5.0.0'
 gem 'dotenv-rails', require: 'dotenv/rails-now'
 gem 'uglifier', '>= 1.3.0'
 gem 'jquery-rails'
-gem 'paypal-recurring',
-    github: 'samuelsimoes/paypal-recurring',
-    ref: '7dd39ffc001e2027ce5be1b908d419a312099006'
+gem 'paypal-sdk-rest'
 
 group :development, :test do
   gem 'rspec-rails', '3.1.0'

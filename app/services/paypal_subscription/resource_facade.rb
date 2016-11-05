@@ -1,27 +1,19 @@
 class PaypalSubscription::ResourceFacade
   def self.checkout_url(options)
-    process_action(action_name: :checkout, options: options).
-      checkout_url
+    response = PayPal::Recurring.new(options).checkout
+    raise response.errors.inspect if response.errors.present?
+    response.checkout_url
   end
 
   def self.make_recurring(options)
-    process_action(action_name: :create_recurring_profile, options: options).
-      profile_id
+    response = PayPal::Recurring.new(options).create_recurring_profile
+    raise response.errors.inspect if response.errors.present?
+    response.profile_id
   end
 
   def self.cancel(options)
-    process_action(action_name: :cancel, options: options)
-  end
-
-  protected
-
-  def self.process_action(action_name:, options: {})
-    ppr = PayPal::Recurring.new(options)
-
-    response = ppr.send(action_name)
-
+    response = PayPal::Recurring.new(options).cancel
     raise response.errors.inspect if response.errors.present?
-
     response
   end
 end

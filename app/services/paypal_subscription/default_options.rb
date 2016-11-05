@@ -1,18 +1,36 @@
 class PaypalSubscription::DefaultOptions
   def self.for(subscriptable)
     {
-      period: :monthly,
-      outstanding: :no_auto,
-      frequency: 1,
-      start_at: Time.current,
-      trial_length: subscriptable.plan.trial_length || 0,
-      payer_id: subscriptable.paypal_payer_id,
-      profile_id: subscriptable.paypal_profile_id,
-      reference: subscriptable.id,
-      description: subscriptable.paypal_description,
-      amount: subscriptable.price,
-      currency: 'EUR',
-      locale: 'en_US'
+      'name': subscriptable.plan.name,
+      'description': subscriptable.paypal_description,
+      'type': 'FIXED',
+      'payment_definitions': [
+        {
+          'name': 'Regular Payments',
+          'type': 'REGULAR',
+          'frequency': 'MONTH',
+          'frequency_interval': '1',
+          'amount': {
+            'value': subscriptable.price,
+            'currency': 'EUR'
+          },
+          'cycles': '12',
+          'charge_models': [
+            {
+              'type': 'TAX',
+              'amount': {
+                'value': subscriptable.price,
+                'currency': 'EUR'
+              }
+            }
+          ]
+        }
+      ],
+      merchant_preferences: {
+        'auto_bill_amount': 'YES',
+        'initial_fail_amount_action': 'CONTINUE',
+        'max_fail_attempts': '0'
+      }
     }
   end
 end

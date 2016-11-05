@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   resources :plans
 
-  post 'paypal/ipn_listener' => 'paypal#ipn_listener'
+  post 'paypal/ipn_listener' => 'paypal#ipn_listener', as: :paypal_ipn_listener
 
   root 'plans#index'
 end
